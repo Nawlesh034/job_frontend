@@ -5,6 +5,7 @@ import AdminLogin from "./pages/admin/AdminLogin"
 import AdminSignup from "./pages/admin/AdminSignup"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import AdminRoute from "./pages/admin/AdminRoute"
+import AuthTest from "./pages/AuthTest"
 
 const App = ()=>{
   return(
@@ -16,6 +17,7 @@ const App = ()=>{
           <Route path="/admin/signup" element={<AdminSignup />} />
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/jobs/:id" element={<JobDetails />} />
+          <Route path="/auth-test" element={<AuthTest />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
