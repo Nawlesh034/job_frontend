@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../axios";
+import api from "../../axios.js";
 
 const AuthTest = () => {
   const [authStatus, setAuthStatus] = useState("checking");
