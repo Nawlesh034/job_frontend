@@ -122,8 +122,8 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-3xl bg-white rounded-lg p-6">
-      <h2 className="text-center font-semibold text-lg mb-6">Create Job Opening</h2>
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-3xl bg-white rounded-lg p-4 sm:p-6">
+      <h2 className="text-center font-semibold text-lg mb-4 sm:mb-6">Create Job Opening</h2>
 
       {/* Row 1: Job Title / Company Name */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -229,22 +229,22 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
       </div>
 
       {/* Actions */}
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
         <button
           type="button"
           onClick={handleSaveDraft}
           disabled={isSubmitting}
-          className="px-5 py-2 rounded-md border border-gray-400 text-sm font-medium bg-white hover:bg-gray-50"
+          className="px-5 py-2 rounded-md border border-gray-400 text-sm font-medium bg-white hover:bg-gray-50 order-2 sm:order-1"
         >
           Save Draft
         </button>
 
-        <div className="flex-1" />
+        <div className="hidden sm:flex-1" />
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2 rounded-md bg-[#00AAFF] text-white font-medium hover:bg-blue-600"
+          className="px-6 py-2 rounded-md bg-[#00AAFF] text-white font-medium hover:bg-blue-600 order-1 sm:order-2"
         >
           {isSubmitting ? "Publishing..." : "Publish"}
         </button>
