@@ -121,6 +121,17 @@ const Cards = ({ filters = {} }) => {
               </div>
 
               <div className="flex gap-2 items-center">
+                <img src={img_1} alt="location icon" className="w-4 h-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm text-gray-700">
+                  {job.locations && job.locations.length > 0 
+                    ? job.locations.length > 2 
+                      ? `${job.locations.slice(0, 2).join(", ")} +${job.locations.length - 2} more`
+                      : job.locations.join(", ")
+                    : job.location || "Not available"}
+                </span>
+              </div>
+
+              <div className="flex gap-2 items-center">
                 <img src={img_1} alt="salary icon" className="w-4 h-4 flex-shrink-0" />
                 <span className="text-xs sm:text-sm text-gray-700">
                   {typeof job?.salaryRange?.min === "number" && typeof job?.salaryRange?.max === "number"

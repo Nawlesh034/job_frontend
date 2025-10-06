@@ -83,7 +83,15 @@ const AdminDashboard = () => {
         {jobs.map(j => (
           <div key={j._id} className="border rounded-lg p-3 bg-white shadow">
             <div className="font-semibold">{j.title}</div>
-            <div className="text-sm text-gray-600">{j.companyName} • {j.location}</div>
+            <div className="text-sm text-gray-600">
+              {j.companyName} • {
+                j.locations && j.locations.length > 0 
+                  ? j.locations.length > 2 
+                    ? `${j.locations.slice(0, 2).join(", ")} +${j.locations.length - 2} more`
+                    : j.locations.join(", ")
+                  : j.location
+              }
+            </div>
             <div className="text-sm mt-1">{j.jobType}</div>
           </div>
         ))}

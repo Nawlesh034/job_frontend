@@ -1,5 +1,5 @@
 // JobForm.jsx
-import React from "react";
+import React, { useState } from "react";
 import api from "../../axios";
 import { useForm } from "react-hook-form";
 
@@ -21,17 +21,21 @@ import { useForm } from "react-hook-form";
  */
 
 export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }) {
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       jobTitle: "",
       companyName: "",
       location: "",
+      locations: [], // New field for multiple locations
       jobType: "",
       salaryMin: "",
       salaryMax: "",
@@ -41,11 +45,18 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
   });
 
   const locations = [
-    { value: "", label: "Choose Preferred Location" },
     { value: "remote", label: "Remote" },
     { value: "mumbai", label: "Mumbai" },
     { value: "bengaluru", label: "Bengaluru" },
     { value: "hyderabad", label: "Hyderabad" },
+    { value: "delhi", label: "Delhi" },
+    { value: "pune", label: "Pune" },
+    { value: "chennai", label: "Chennai" },
+    { value: "kolkata", label: "Kolkata" },
+    { value: "gurgaon", label: "Gurgaon" },
+    { value: "noida", label: "Noida" },
+    { value: "ahmedabad", label: "Ahmedabad" },
+    { value: "jaipur", label: "Jaipur" },
   ];
 
   // Must match backend enum: ["Full-time", "Part-time", "Contract", "Internship"]
@@ -59,6 +70,19 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
 
   const watchSalaryMin = watch("salaryMin");
   const watchSalaryMax = watch("salaryMax");
+
+  // Handle location selection
+  const handleLocationChange = (locationValue, isChecked) => {
+    let newLocations;
+    if (isChecked) {
+      newLocations = [...selectedLocations, locationValue];
+    } else {
+      newLocations = selectedLocations.filter(loc => loc !== locationValue);
+    }
+    setSelectedLocations(newLocations);
+    setValue("locations", newLocations);
+    setValue("location", newLocations[0] || ""); // Set primary location
+  };
 
   const onSubmit = async (data) => {
     // simple validation logic for salary range
@@ -74,7 +98,8 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
     const payload = {
       title: data.jobTitle.trim(),
       companyName: data.companyName.trim(),
-      location: data.location,
+      location: data.location, // Primary location for backward compatibility
+      locations: data.locations || [], // Multiple locations
       jobType: data.jobType,
       salaryRange: {
         min: data.salaryMin ? Number(data.salaryMin) : undefined,
@@ -148,21 +173,27 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
         </div>
       </div>
 
-      {/* Row 2: Location / Job Type */}
+      {/* Row 2: Locations / Job Type */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Location</label>
-          <select
-            {...register("location", { required: "Please choose a location" })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
-          >
+          <label className="block text-sm font-medium mb-1">Locations (Select Multiple)</label>
+          <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-2">
             {locations.map((l) => (
-              <option key={l.value} value={l.value}>
-                {l.label}
-              </option>
+              <label key={l.value} className="flex items-center space-x-2 text-sm">
+                <input
+                  type="checkbox"
+                  value={l.value}
+                  checked={selectedLocations.includes(l.value)}
+                  onChange={(e) => handleLocationChange(l.value, e.target.checked)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span>{l.label}</span>
+              </label>
             ))}
-          </select>
-          {errors.location && <p className="text-xs text-red-500 mt-1">{errors.location.message}</p>}
+          </div>
+          {selectedLocations.length === 0 && (
+            <p className="text-xs text-red-500 mt-1">Please select at least one location</p>
+          )}
         </div>
 
         <div>
