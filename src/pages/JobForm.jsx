@@ -177,23 +177,53 @@ export default function JobForm({ onPublish = () => {}, onSaveDraft = () => {} }
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
           <label className="block text-sm font-medium mb-1">Locations (Select Multiple)</label>
-          <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border border-gray-300 rounded-lg p-2">
-            {locations.map((l) => (
-              <label key={l.value} className="flex items-center space-x-2 text-sm">
-                <input
-                  type="checkbox"
-                  value={l.value}
-                  checked={selectedLocations.includes(l.value)}
-                  onChange={(e) => handleLocationChange(l.value, e.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span>{l.label}</span>
-              </label>
-            ))}
+          <div className="space-y-2">
+            {/* Selected Locations Display */}
+            {selectedLocations.length > 0 && (
+              <div className="flex flex-wrap gap-2 p-2 bg-blue-50 rounded-lg border">
+                {selectedLocations.map((loc) => (
+                  <span
+                    key={loc}
+                    className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                  >
+                    {locations.find(l => l.value === loc)?.label}
+                    <button
+                      type="button"
+                      onClick={() => handleLocationChange(loc, false)}
+                      className="ml-1 text-blue-600 hover:text-blue-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            
+            {/* Location Dropdown */}
+            <select
+              value=""
+              onChange={(e) => {
+                if (e.target.value && !selectedLocations.includes(e.target.value)) {
+                  handleLocationChange(e.target.value, true);
+                }
+                e.target.value = ""; // Reset dropdown
+              }}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-1 focus:ring-blue-400"
+            >
+              <option value="">Add a location...</option>
+              {locations
+                .filter(loc => !selectedLocations.includes(loc.value))
+                .map((l) => (
+                  <option key={l.value} value={l.value}>
+                    {l.label}
+                  </option>
+                ))}
+            </select>
+            
+            {selectedLocations.length === 0 && (
+              <p className="text-xs text-red-500">Please select at least one location</p>
+            )}
           </div>
-          {selectedLocations.length === 0 && (
-            <p className="text-xs text-red-500 mt-1">Please select at least one location</p>
-          )}
         </div>
 
         <div>
