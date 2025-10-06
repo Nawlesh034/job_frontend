@@ -15,7 +15,7 @@ const AdminLogin = () => {
     setLoading(true);
     try {
       await api.post("/api/v1/login", { email, password }, { withCredentials: true });
-      navigate("/");
+      navigate("/admin");
     } catch (err) {
       const msg = err?.response?.data?.message || "Login failed";
       setError(msg);
